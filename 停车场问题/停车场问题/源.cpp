@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits> 
 
 #define MAX_CAPACITY 10 // 停车场的最大容量
 
@@ -120,22 +121,45 @@ int main() {
         std::cout << "请输入操作：(A)到达 (L)离开 (Q)退出：";
         std::cin >> action;
 
-        if (action == 'Q' || action == 'q') {
-            break;
-        }
+        // 将输入的字符转换为大写，以便处理大小写输入
+        action = toupper(action);
 
-        std::cout << "请输入车辆编号：";
-        std::cin >> carId;
+        switch (action) {
+            case 'A':
+                std::cout << "请输入车辆编号(请输入大于零的数字)：";
+                std::cin >> carId;
+                if (std::cin.fail()) {
+                    std::cin.clear();// 清除错误标志
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');// 忽略当前行的剩余输入 头文件#include <limits> 
+                    std::cout << "输入错误，请输入正确的车辆编号。\n";
+                    break;
+                }
+                currentTime++; //时间加一
+                arrive(parkingLot, waitingLane, carId, currentTime);
+                break;
 
-        currentTime++;//时间加一
+            case 'L':
+                std::cout << "请输入车辆编号(请输入大于零的数字)：";
+                std::cin >> carId;
+                if (std::cin.fail()) {
+                    std::cin.clear();// 清除错误标志
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');// 忽略当前行的剩余输入 
+                    std::cout << "输入错误，请输入正确的车辆编号。\n";
+                    break;
+                }
+                currentTime++; //时间加一
+                leave(parkingLot, waitingLane, carId, currentTime);
+                break;
 
-        if (action == 'A' || action == 'a') {
-            arrive(parkingLot, waitingLane, carId, currentTime);
-        } else if (action == 'L' || action == 'l') {
-            leave(parkingLot, waitingLane, carId, currentTime);
+            case 'Q':
+                freeMemory(parkingLot, waitingLane);
+                return 0;
+
+            default:
+                std::cout << "输入错误，请输入正确的操作指令（A, L, Q）。\n";
+                break;
         }
     }
-    freeMemory(parkingLot, waitingLane);
 
     return 0;
 }
