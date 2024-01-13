@@ -51,6 +51,14 @@ void arrive(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int cur
 		{
 			break;
 		}
+		if(typeid(newCar->arrival_time) != typeid(int)){
+			std::cout << "时间输入错误，请确定是否正确输入时间！";
+			break;
+		}
+		if (std::cin.fail()) {
+                    std::cin.clear();// 清除错误标志
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');// 忽略当前行的剩余输入 头文件#include <limits> 
+		}
 		std::cout << "时间输入错误，请确定是否正确输入时间！";
 	}
 		//std::cout << "请输入您要停泊的时间:";
