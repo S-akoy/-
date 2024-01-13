@@ -84,12 +84,53 @@ void leave(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int curr
 	{
 		std::cout << "请输入当前时间:";
 		std::cin >> currentTime;
-		if (currentTime < 24 && currentTime > 0)
-		{
+		getchar();
+		if (std::cin.fail()) {
+			// 如果 cin.fail() 满足，即 cin 出故障了，
+			// 那么就要清空缓冲区，等待用户重新输入
+
+			// 当输入流出现问题时，cin 会记仇。即，cin 会记录自己的状态。
+			// 这个状态可以通过 cin.fail() 和 cin.good() 获取。
+			// 如果 cin 状态正常，上述两个操作获得到的值分别为 0 和 1.
+			// 如果 cin 状态异常，上述两个操作获得到的值分别为 1 和 0, 即 cin “记仇”了。
+
+			std::cin.clear();
+			// 调用 cin.clear(), 可以解除 cin 的记仇状态，让 cin 恢复正常。
+			// 即：让 cin.fail() 变成 0, cin.good() 变成 1.
+
+			// 接下来，应该清空缓冲区了。因为，让 cin 出错的数据依然在输入缓冲区中，
+			// 直接重新输入的话，又要出错。
+
+			std::cin.ignore(2048, '\n');
+			}
+		else if (currentTime >= 0 && currentTime <= 24) {
+			// 如果能进入这部分，说明没有进入上一部分，即：cin 状态正常，也就是 x 被正确赋值了，并且范围正确。
+			
+			// 因为范围正确，所以不需要继续在这个循环里等待输入。直接跳出即可。
 			break;
 		}
-		std::cout << "时间输入错误，请确定是否正确输入时间！";
+
+		// 提醒用户输入错误。
+		std::cout << "输入错误。请重新输入。" << std::endl;
+		// 这行代码之后，程序回到循环开头，重新等待用户输入...
+		// 如果之前用户输入了多组数据，并且流状态正常，那么 cin 会继续从输入缓冲区读入数据，
+		// 于是会产生虽然提示用户“请输入”，但是并没有等待，而是直接从缓冲区获得数据的现象。
+
 	}
+		//if(isdigit(currentTime) ){
+		//	std::cout << "时间输入错误，请确定是否正确输入时间！";
+		//	continue;
+		//}
+		////if (std::cin.fail()) {
+  ////                  std::cin.clear();// 清除错误标志
+  ////                  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');// 忽略当前行的剩余输入 头文件#include <limits> 
+		////}
+		//if (currentTime < 24 && currentTime > 0)
+		//{
+		//	break;
+		//}
+		//std::cout << "时间输入错误，请确定是否正确输入时间！";
+		//std::cout << "时间输入错误，请确定是否正确输入时间！";
             std::cout << "车辆 " << leavingCar->id << " 离开停车场，停留时间为 " << (currentTime - leavingCar->arrival_time) << "小时，应交纳费用为 " << (currentTime - leavingCar->arrival_time) * 10 << "元\n";
             delete leavingCar;
 
@@ -131,7 +172,7 @@ void leave(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int curr
     }
 
     std::cout << "未找到车辆 " << carId << "\n";
-}
+	}
 
 int main() {
     
