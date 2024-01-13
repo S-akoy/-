@@ -43,8 +43,18 @@ void freeMemory(ParkingLot& parkingLot, WaitingLane& waitingLane) {
 void arrive(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int currentTime) {
     Car* newCar = new Car;
     newCar->id = carId;
-    newCar->arrival_time = currentTime;
-    newCar->parking_time = 0;
+	while (true)
+	{
+		std::cout << "请输入当前时间:";
+		std::cin >> newCar->arrival_time;
+		if (newCar->arrival_time < 24 && newCar->arrival_time > 0)
+		{
+			break;
+		}
+		std::cout << "时间输入错误，请确定是否正确输入时间！";
+	}
+		std::cout << "请输入您要停泊的时间:";
+		std::cin >> newCar->parking_time;
 
     if (parkingLot.count < MAX_CAPACITY) {
         parkingLot.cars[parkingLot.count] = newCar;
@@ -62,7 +72,6 @@ void leave(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int curr
     for (int i = 0; i < parkingLot.count; i++) {
         if (parkingLot.cars[i]->id == carId) {
             Car* leavingCar = parkingLot.cars[i];
-            leavingCar->parking_time = currentTime - leavingCar->arrival_time;
             std::cout << "车辆 " << leavingCar->id << " 离开停车场，停留时间为 " << leavingCar->parking_time << "小时，应交纳费用为 " << leavingCar->parking_time * 10 << "元\n";
             delete leavingCar;
 
