@@ -53,8 +53,8 @@ void arrive(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int cur
 		}
 		std::cout << "时间输入错误，请确定是否正确输入时间！";
 	}
-		std::cout << "请输入您要停泊的时间:";
-		std::cin >> newCar->parking_time;
+		//std::cout << "请输入您要停泊的时间:";
+		//std::cin >> newCar->parking_time;
 
     if (parkingLot.count < MAX_CAPACITY) {
         parkingLot.cars[parkingLot.count] = newCar;
@@ -72,7 +72,17 @@ void leave(ParkingLot& parkingLot, WaitingLane& waitingLane, int carId, int curr
     for (int i = 0; i < parkingLot.count; i++) {
         if (parkingLot.cars[i]->id == carId) {
             Car* leavingCar = parkingLot.cars[i];
-            std::cout << "车辆 " << leavingCar->id << " 离开停车场，停留时间为 " << leavingCar->parking_time << "小时，应交纳费用为 " << leavingCar->parking_time * 10 << "元\n";
+	while (true)
+	{
+		std::cout << "请输入当前时间:";
+		std::cin >> currentTime;
+		if (currentTime < 24 && currentTime > 0)
+		{
+			break;
+		}
+		std::cout << "时间输入错误，请确定是否正确输入时间！";
+	}
+            std::cout << "车辆 " << leavingCar->id << " 离开停车场，停留时间为 " << (currentTime - leavingCar->arrival_time) << "小时，应交纳费用为 " << (currentTime - leavingCar->arrival_time) * 10 << "元\n";
             delete leavingCar;
 
             // 将后面的车辆往前移动一个位置
